@@ -3,16 +3,16 @@ package com.shoppingmall.shop.service;
 import com.shoppingmall.shop.Entity.Notice;
 import com.shoppingmall.shop.Repository.NoticeRepository;
 import com.shoppingmall.shop.dto.NoticeDTO;
+import com.shoppingmall.shop.dto.PageRequestDTO;
+import com.shoppingmall.shop.dto.PageResultDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -49,17 +49,15 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public List<NoticeDTO> getList(Pageable pageable) {
+    public PageResultDTO<NoticeDTO, Notice> getList(PageRequestDTO requestDTO) {
 
         log.info("Notice Service -> getList");
 
-        Page<Notice> list = noticeRepository.findAll(pageable);
+        Page<Notice> list = noticeRepository.findAll(requestDTO.getPageable(Sort.by("nno").descending()));
 
-        List<NoticeDTO> noticeList = list.stream().map(notice -> {
-            return entityToDto(notice);
-        }).collect(Collectors.toList());
+        Function<Notice, NoticeDTO> fn = (notice -> entityToDto(notice));
 
-        return noticeList;
+        return new PageResultDTO<>(list, fn);
     }
 
 

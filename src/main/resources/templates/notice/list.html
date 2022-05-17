@@ -50,7 +50,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
             </tr>
             </thead>
             <tbody>
-            <tr th:each="dto:${result}">
+            <tr th:each="dto:${result.dtoList}">
                 <th scope="row">[[${dto.nno}]]</th>
                 <td>
                     <a th:href="@{/notice/read(nno = ${dto.nno})}">
@@ -89,6 +89,28 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
             </li>
 
         </ul>-->
+
+        <!--paging-->
+        <ul class="pagination h-100 justify-content-center align-items-center">
+            <!--Prev Button-->
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link" th:href="@{/notice/list(page=${result.start - 1})}" tabindex="-1">Previous</a>
+            </li>
+
+            <!--Page Buttons-->
+            <li th:class=" 'page-item ' + ${result.page == page ? 'active':''}"
+                th:each="page:${result.pageList}">
+                <a class="page-link" th:href="@{/notice/list(page=${page})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <!--Next Button-->
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{/notice/list(page=${result.end + 1})}">Next</a>
+            </li>
+
+        </ul>
 
         <!--<div class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">

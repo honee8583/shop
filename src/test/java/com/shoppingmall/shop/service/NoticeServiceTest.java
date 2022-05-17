@@ -2,12 +2,12 @@ package com.shoppingmall.shop.service;
 
 import com.shoppingmall.shop.Entity.Notice;
 import com.shoppingmall.shop.dto.NoticeDTO;
+import com.shoppingmall.shop.dto.PageRequestDTO;
+import com.shoppingmall.shop.dto.PageResultDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,11 +36,15 @@ public class NoticeServiceTest {
     @Test
     @DisplayName("NoticeService:공지사항페이징")
     public void testGetList(){
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("nno").descending());
+        PageRequestDTO requestDTO = new PageRequestDTO();
 
-        List<NoticeDTO> dtoList = noticeService.getList(pageable);
+        Pageable pageable = requestDTO.getPageable(Sort.by("nno").descending());
 
-        for(NoticeDTO dto : dtoList){
+        PageResultDTO<NoticeDTO, Notice> resultDTO = noticeService.getList(requestDTO);
+
+        List<NoticeDTO> result = resultDTO.getDtoList();
+
+        for(NoticeDTO dto : result){
             System.out.println(dto);
         }
     }
