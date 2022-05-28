@@ -1,7 +1,10 @@
 package com.shoppingmall.shop.repository;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.shoppingmall.shop.Entity.Member;
 import com.shoppingmall.shop.Entity.Notice;
+import com.shoppingmall.shop.Entity.QNotice;
 import com.shoppingmall.shop.Repository.NoticeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +108,52 @@ public class NoticeRepositoryTest {
     @Test
     public void deleteNotice(){
         noticeRepository.deleteById(20L);
+    }
+
+    @Test
+    public void testQuery1(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("nno").descending());
+
+        QNotice qNotice = QNotice.notice;
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        //BooleanExpression 클래스는 Predicate 클래스를 구현
+        BooleanExpression expression = qNotice.title.contains("2");
+
+        booleanBuilder.and(expression);
+
+        Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
+
+        result.stream().forEach(notice -> {
+            System.out.println(notice);
+        });
+    }
+
+    @Test
+    public void testQuery2(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("nno").descending());
+
+        QNotice qNotice = QNotice.notice;
+
+        String keyword = "2";
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        BooleanExpression exTitle = qNotice.title.contains(keyword);    //title 포함여부 조건
+
+        BooleanExpression exContent = qNotice.content.contains(keyword);    //content 포함여부 조건
+
+        BooleanExpression exAll = exTitle.or(exContent); //title 검색부분과 content 검색부분 합체한 최종 조건 or -> or 문으로 생성 = 제목 또는 내용에 포함될시 검색
+
+        booleanBuilder.and(exAll);  //where 문제 추가(추가할때는 and()메소드 사용)
+
+        booleanBuilder.and(qNotice.nno.gt(0L));
+
+        Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
+
+        result.stream().forEach(notice -> {
+            System.out.println(notice);
+        });
     }
 }

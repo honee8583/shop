@@ -14,8 +14,8 @@ public class PageRequestDTO {   //화면페이지에서 요청하는 데이터�
 
     private int page;
     private int size;
-    //private String type;
-    //private String keyword;
+    private String type;
+    private String keyword;
 
     public PageRequestDTO(){
         this.page = 1;

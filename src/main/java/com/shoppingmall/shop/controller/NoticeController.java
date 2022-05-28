@@ -32,9 +32,7 @@ public class NoticeController {
     public void list(PageRequestDTO requestDTO, Model model){
         //Pageable pageable = PageRequest.of(0, 10, Sort.by("nno").descending());
 
-        PageResultDTO<NoticeDTO, Notice> result = noticeService.getList(requestDTO);
-
-        model.addAttribute("result", result);
+        model.addAttribute("result",  noticeService.getList(requestDTO));
     }
 
     @GetMapping({"/read", "/modify"})
@@ -61,4 +59,12 @@ public class NoticeController {
         return "redirect:/notice/read";
     }
 
+    @GetMapping("/register")
+    public void register(){
+//        log.info("NoticeController -> register noticeDTO : " + noticeDTO);
+
+//        noticeService.register(noticeDTO);
+
+//        return "redirect:/notice/list";
+    }
 }

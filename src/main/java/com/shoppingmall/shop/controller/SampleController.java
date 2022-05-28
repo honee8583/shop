@@ -27,6 +27,7 @@ public class SampleController {
 
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/member")
     public void exMember(@AuthenticationPrincipal AuthMemberDTO memberDTO){ //컨트롤러에서 사용자 정보 확인
         log.info("exMember.......");

@@ -1,6 +1,10 @@
 package com.shoppingmall.shop.service;
 
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.shoppingmall.shop.Entity.Notice;
+import com.shoppingmall.shop.Entity.QNotice;
 import com.shoppingmall.shop.Repository.NoticeRepository;
 import com.shoppingmall.shop.dto.NoticeDTO;
 import com.shoppingmall.shop.dto.PageRequestDTO;
@@ -78,4 +82,35 @@ public class NoticeServiceImpl implements NoticeService{
     public void remove(Long nno) {
         noticeRepository.deleteById(nno);
     }
+
+    /*private BooleanBuilder getSearch(PageRequestDTO requestDTO){
+        String type = requestDTO.getType();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QNotice qNotice = QNotice.notice;
+
+        String keyword = requestDTO.getKeyword();
+
+        BooleanExpression expression = qNotice.nno.gt(0L);
+
+        booleanBuilder.and(expression);
+
+        if(type == null || type.trim().length() == 0){  //검색타입이 없는 경우(검색이 아닌경우)
+            return booleanBuilder;  //0보다 큰 게시물만 검색
+        }
+
+        //검색조건
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if(type.contains("t")){
+            conditionBuilder.or(qNotice.title.contains(keyword));
+        }
+        if(type.contains("c")){
+            conditionBuilder.or(qNotice.content.contains(keyword));
+        }
+        if(type.contains("w")){
+            conditionBuilder.or(qNotice.member.conati
+        }
+    }*/
 }
