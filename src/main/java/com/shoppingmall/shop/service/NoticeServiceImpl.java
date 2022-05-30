@@ -1,6 +1,5 @@
 package com.shoppingmall.shop.service;
 
-
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.shoppingmall.shop.Entity.Notice;
@@ -12,8 +11,10 @@ import com.shoppingmall.shop.dto.PageResultDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -52,16 +53,21 @@ public class NoticeServiceImpl implements NoticeService{
         return noticeDTO;
     }
 
+    @Transactional
     @Override
     public PageResultDTO<NoticeDTO, Notice> getList(PageRequestDTO requestDTO) {
 
         log.info("Notice Service -> getList");
 
-        Page<Notice> list = noticeRepository.findAll(requestDTO.getPageable(Sort.by("nno").descending()));
+        BooleanBuilder booleanBuilder = getSearch(requestDTO);
+
+        Pageable pageable = requestDTO.getPageable(Sort.by("nno").descending());
+
+        Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
 
         Function<Notice, NoticeDTO> fn = (notice -> entityToDto(notice));
 
-        return new PageResultDTO<>(list, fn);
+        return new PageResultDTO<>(result, fn);
     }
 
 
@@ -70,12 +76,14 @@ public class NoticeServiceImpl implements NoticeService{
 
         Optional<Notice> result = noticeRepository.findById(noticeDTO.getNno());
 
-        Notice notice = result.get();
+        if(result.isPresent()) {
+            Notice notice = result.get();
 
-        notice.changeTitle(noticeDTO.getTitle());
-        notice.changeContent(noticeDTO.getContent());
+            notice.changeTitle(noticeDTO.getTitle());
+            notice.changeContent(noticeDTO.getContent());
 
-        noticeRepository.save(notice);
+            noticeRepository.save(notice);
+        }
     }
 
     @Override
@@ -83,34 +91,36 @@ public class NoticeServiceImpl implements NoticeService{
         noticeRepository.deleteById(nno);
     }
 
-    /*private BooleanBuilder getSearch(PageRequestDTO requestDTO){
-        String type = requestDTO.getType();
-
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO){
         QNotice qNotice = QNotice.notice;
 
         String keyword = requestDTO.getKeyword();
+        String type = requestDTO.getType();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         BooleanExpression expression = qNotice.nno.gt(0L);
 
         booleanBuilder.and(expression);
 
-        if(type == null || type.trim().length() == 0){  //검색타입이 없는 경우(검색이 아닌경우)
-            return booleanBuilder;  //0보다 큰 게시물만 검색
+        if(type == null || type.trim().length() == 0){
+            return booleanBuilder;
         }
 
-        //검색조건
         BooleanBuilder conditionBuilder = new BooleanBuilder();
 
         if(type.contains("t")){
             conditionBuilder.or(qNotice.title.contains(keyword));
         }
+        if(type.contains("w")){
+            conditionBuilder.or(qNotice.member.email.contains(keyword));
+        }
         if(type.contains("c")){
             conditionBuilder.or(qNotice.content.contains(keyword));
         }
-        if(type.contains("w")){
-            conditionBuilder.or(qNotice.member.conati
-        }
-    }*/
+
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
+    }
 }

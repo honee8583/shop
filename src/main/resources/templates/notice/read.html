@@ -43,16 +43,13 @@
                        th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
             </div>
 
-        <!--<a th:href="@{/notice/modify(page = ${requestDTO.page}, bno = ${dto.bno},
-            type=${requestDTO.type}, keyword=${requestDTO.keyword})}">
-            <button type="button" class="btn btn-primary">Modify</button>
-        </a>-->
-
-        <a th:href="@{/notice/modify(nno=${dto.nno})}">
+        <a th:href="@{/notice/modify(nno=${dto.nno}, page=${requestDTO.page},type=${requestDTO.type},
+                keyword=${requestDTO.keyword})}">
             <button type="button" class="btn btn-primary">Modify</button>
         </a>
 
-        <a th:href="@{/notice/list}">
+        <a th:href="@{/notice/list(page=${requestDTO.page},type=${requestDTO.type},
+                keyword=${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
 

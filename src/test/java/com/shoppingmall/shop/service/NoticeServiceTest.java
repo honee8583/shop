@@ -68,4 +68,29 @@ public class NoticeServiceTest {
 
         noticeService.remove(nno);
     }
+
+    @Test
+    @DisplayName("NoticeService:검색쿼리 구현한 getList")
+    public void testSearchGetList(){
+        PageRequestDTO requestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .type("w")
+                .keyword("honee8583")
+                .build();
+
+        PageResultDTO<NoticeDTO, Notice> result = noticeService.getList(requestDTO);
+
+        System.out.println("PREV : " + result.isPrev());
+        System.out.println("NEXT: " + result.isNext());
+        System.out.println("TOTAL : " + result.getTotalPage());
+
+        System.out.println("--------------------------------------");
+        for(NoticeDTO noticeDTO : result.getDtoList()){
+            System.out.println(noticeDTO);
+        }
+
+        System.out.println("=======================================");
+        result.getPageList().forEach(i -> System.out.println(i));
+    }
 }
