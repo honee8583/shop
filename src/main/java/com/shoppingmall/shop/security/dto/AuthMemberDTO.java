@@ -23,6 +23,10 @@ public class AuthMemberDTO extends User implements OAuth2User {
 
     private String name;
 
+    //private String address;
+
+    //private String phone;
+
     private boolean fromSocial;
 
     private Map<String, Object> attr;
