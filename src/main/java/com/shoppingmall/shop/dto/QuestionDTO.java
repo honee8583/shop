@@ -27,4 +27,5 @@ public class QuestionDTO {
 
     private int count;
 
+    private int replyCount;
 }

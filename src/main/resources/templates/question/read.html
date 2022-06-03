@@ -8,7 +8,7 @@
 
             <div class="form-group">
                 <label>Qno</label>
-                <input type="text" class="form-control" name="nno" th:value="${dto.qno}" readonly>
+                <input type="text" class="form-control" name="qno" th:value="${dto.qno}" readonly>
             </div>
 
             <div class="form-group">
@@ -47,6 +47,112 @@
                 keyword=${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
+
+        <!--replies-->
+        <div>
+            <div class="mt-4">
+                <h5><span class="badge badge-info addReply">Add Reply</span> </h5>
+                <h5><span class="badge badge-secondary replyCount">Reply Count [[${dto.replyCount}]]</span> </h5>
+            </div>
+            <div class="list-group replyList">
+                <!--댓글이 들어갈 공간-->
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="replyText" placeholder="Reply Text...">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="replyer" placeholder="Replyer">
+                            <input type="hidden" name="rno">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger replyRemove">Remove</button>
+                        <button type="button" class="btn btn-warning replyModify">Modify</button>
+                        <button type="button" class="btn btn-primary replySave">Save</button>
+                        <button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            $(document).ready(function(){
+
+                var qno = [[${dto.qno}]];
+
+                var listGroup = $(".replyList");
+
+                //날짜 처리를 위한 함수
+                function formatTime(str){
+                    var date = new Date(str);
+
+                    return date.getFullYear() + '/' +
+                        (date.getMonth() + 1) + '/' +
+                        date.getDate() + ' ' +
+                        date.getHours() + ':' +
+                        date.getMinutes();
+                }
+
+                function loadJSONData(){
+                    $.getJSON('/replies/question/' + qno, function(arr){
+                        console.log(arr);
+
+                        var str = "";
+
+                        $('.replyCount').html("Reply Count " + arr.length);
+
+                        $.each(arr, function(idx, reply){
+                            console.log(reply);
+                            str += '<div class="card-body" data-rno="' + reply.rno + '"><b>' + reply.rno + '</b>';
+                            str += '<h5 class="card-title">' + reply.text + '</h5>';
+                            str += '<h6 class="card-subtitle mb-2 text-muted">' + reply.replyerEmail +  '</h6>';
+                            str += '<p class="card-text">' + formatTime(reply.regDate) + '</p>';
+                            str += '</div>';
+                        })//end each
+
+                        listGroup.html(str);    //갱신
+
+                    });//end getJSON
+                }//end loadJSONData
+
+                $(".replyCount").click(function(){
+                    loadJSONData();
+                });//end click
+
+                var modal = $('.modal');
+
+                $(".addReply").click(function(){
+                    modal.modal('show');
+
+                    $('input[name="replyText"]').val('');
+                    $('input[name="replyer"]').val('');
+
+                    $(".modal-footer .btn").hide();
+                    $(".replySave, .replyClose").show();
+
+                });
+
+            });
+
+
+        </script>
 
     </th:block>
 </th:block>

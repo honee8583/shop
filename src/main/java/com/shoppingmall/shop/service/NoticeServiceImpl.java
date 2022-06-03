@@ -113,7 +113,7 @@ public class NoticeServiceImpl implements NoticeService{
             conditionBuilder.or(qNotice.title.contains(keyword));
         }
         if(type.contains("w")){
-            conditionBuilder.or(qNotice.member.email.contains(keyword));
+            conditionBuilder.or(qNotice.member.name.contains(keyword));
         }
         if(type.contains("c")){
             conditionBuilder.or(qNotice.content.contains(keyword));

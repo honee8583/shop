@@ -8,11 +8,11 @@ import com.shoppingmall.shop.dto.QuestionDTO;
 
 public interface QuestionService {
 
-    PageResultDTO<QuestionDTO, Question> getList(PageRequestDTO requestDTO);
+    PageResultDTO<QuestionDTO, Object[]> getList(PageRequestDTO requestDTO);
     QuestionDTO get(Long qno);
-    void register(QuestionDTO dto);
+    Long register(QuestionDTO dto);
     void modify(QuestionDTO dto);
-    void remove(Long qno);
+    void removeWithReplies(Long qno);
 
     default Question dtoToEntity(QuestionDTO dto){
         Member member = Member.builder().email(dto.getWriterEmail()).build();
@@ -27,14 +27,15 @@ public interface QuestionService {
         return question;
     }
 
-    default QuestionDTO entityToDTO(Question question){
+    default QuestionDTO entityToDTO(Question question, Member member, Long replyCount){
         QuestionDTO dto = QuestionDTO.builder()
                 .qno(question.getQno())
                 .title(question.getTitle())
                 .content(question.getContent())
-                .writerEmail(question.getMember().getEmail())
-                .writerName(question.getMember().getName())
+                .writerEmail(member.getEmail())
+                .writerName(member.getName())
                 .count(question.getCount())
+                .replyCount(replyCount.intValue())
                 .regDate(question.getRegDate())
                 .modDate(question.getModDate())
                 .build();

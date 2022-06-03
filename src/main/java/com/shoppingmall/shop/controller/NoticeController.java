@@ -3,6 +3,7 @@ package com.shoppingmall.shop.controller;
 import com.shoppingmall.shop.dto.NoticeDTO;
 import com.shoppingmall.shop.dto.PageRequestDTO;
 import com.shoppingmall.shop.service.NoticeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Log4j2
+@RequiredArgsConstructor
 @RequestMapping("/notice")
 public class NoticeController {
 
-    @Autowired
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
 
     @GetMapping("/list")
     public void list(@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){

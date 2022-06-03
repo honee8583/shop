@@ -17,16 +17,14 @@ public class QuestionServiceTest {
     private QuestionService questionService;
 
     @Test
-    @DisplayName("문의사항 목록(검색) 테스트")
+    @DisplayName("문의사항 목록 테스트")
     public void testGetList(){
         PageRequestDTO requestDTO = PageRequestDTO.builder()
                 .page(1)
                 .size(10)
-                .type("tc")
-                .keyword("0")
                 .build();
 
-        PageResultDTO<QuestionDTO, Question> result = questionService.getList(requestDTO);
+        PageResultDTO<QuestionDTO, Object[]> result = questionService.getList(requestDTO);
 
         for(QuestionDTO dto : result.getDtoList()){
             System.out.println(dto);
@@ -36,7 +34,7 @@ public class QuestionServiceTest {
     @Test
     @DisplayName("문의사항 조회 테스트")
     public void testGet(){
-        Long qno = 50L;
+        Long qno = 40L;
 
         QuestionDTO dto = questionService.get(qno);
 
@@ -59,7 +57,7 @@ public class QuestionServiceTest {
     @DisplayName("문의사항 수정 테스트")
     public void testModify(){
         QuestionDTO dto = QuestionDTO.builder()
-                .qno(51L)
+                .qno(52L)
                 .title("Question51(modified)")
                 .content("Question Content51(modified)")
                 .writerEmail("user95@gmail.com")
@@ -70,9 +68,9 @@ public class QuestionServiceTest {
 
     @Test
     @DisplayName("문의사항 삭제 테스트")
-    public void testRemove(){
-        Long qno = 51L;
+    public void testRemoveWithReplies(){
+        Long qno = 47L;
 
-        questionService.remove(qno);
+        questionService.removeWithReplies(qno);
     }
 }

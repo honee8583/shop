@@ -3,6 +3,7 @@ package com.shoppingmall.shop.controller;
 import com.shoppingmall.shop.dto.PageRequestDTO;
 import com.shoppingmall.shop.dto.QuestionDTO;
 import com.shoppingmall.shop.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/question")
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     @GetMapping("/register")
     public void register(){
@@ -27,11 +28,13 @@ public class QuestionController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("requestDTO") PageRequestDTO requestDTO, QuestionDTO questionDTO){
+    public String register(@ModelAttribute("requestDTO") PageRequestDTO requestDTO, QuestionDTO questionDTO, RedirectAttributes redirectAttributes){
 
         log.info("QuestionController -> register dto : " + questionDTO);
 
-        questionService.register(questionDTO);
+        Long qno = questionService.register(questionDTO);
+
+        redirectAttributes.addFlashAttribute("msg", qno);
 
         return "redirect:/question/list";
     }
@@ -71,7 +74,7 @@ public class QuestionController {
 
         log.info("QuestionController -> remove qno : " + qno);
 
-        questionService.remove(qno);
+        questionService.removeWithReplies(qno);
 
         redirectAttributes.addFlashAttribute("msg", qno);
 
