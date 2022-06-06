@@ -195,6 +195,28 @@
                     modal.modal('show');
                 });
 
+                //댓글 삭제
+                $(".replyRemove").on("click", function(){
+
+                    var rno = $("input[name='rno']").val();
+
+                    $.ajax({
+                        url: '/replies/' + rno,
+                        method:'delete',
+                        success:function(result){
+                            console.log("result: " + result);
+                            if(result == 'success'){
+                                alert("댓글이 삭제되었습니다.");
+                                modal.modal('hide');
+                                loadJSONData();
+                            }
+                        }
+                    })//end ajax
+                });//end replyRemove
+
+                //댓글 수정
+
+
             });//end document
 
 
