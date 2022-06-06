@@ -26,10 +26,12 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("ReplyService -> register");
 
         Reply reply = dtoToEntity(replyDTO);
+        log.info("reply.rno : " + reply.getRno());
 
-        replyRepository.save(reply);
+        Reply savedReply = replyRepository.save(reply);
+        log.info("savedReply.rno : " + savedReply.getRno());
 
-        return reply.getRno();
+        return savedReply.getRno();
     }
 
     @Transactional

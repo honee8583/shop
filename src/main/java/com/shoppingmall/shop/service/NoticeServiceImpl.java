@@ -31,7 +31,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         log.info("Notice Service -> register");
 
-        Notice notice = DtoToEntity(noticeDTO);
+        Notice notice = dtoToEntity(noticeDTO);
 
         noticeRepository.save(notice);
 

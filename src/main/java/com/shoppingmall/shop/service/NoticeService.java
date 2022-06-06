@@ -17,7 +17,7 @@ public interface NoticeService {
     void modify(NoticeDTO noticeDTO); //공지사항 수정
     void remove(Long nno);            //공지사항 삭제
 
-    default Notice DtoToEntity(NoticeDTO noticeDTO){
+    default Notice dtoToEntity(NoticeDTO noticeDTO){
         Notice notice = Notice.builder()
                 .title(noticeDTO.getTitle())
                 .content(noticeDTO.getContent())

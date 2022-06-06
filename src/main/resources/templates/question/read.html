@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <th:block th:replace="~{/layout/basic :: setContent(~{this :: content}) }">
     <th:block th:fragment="content">
@@ -51,7 +52,7 @@
         <!--replies-->
         <div>
             <div class="mt-4">
-                <h5><span class="badge badge-info addReply">Add Reply</span> </h5>
+                <h5><span class="badge badge-info addReply" sec:authorize="hasRole('ADMIN')">Add Reply</span> </h5>
                 <h5><span class="badge badge-secondary replyCount">Reply Count [[${dto.replyCount}]]</span> </h5>
             </div>
             <div class="list-group replyList">
@@ -59,6 +60,7 @@
             </div>
         </div>
 
+        <!--modal-->
         <div class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -76,7 +78,7 @@
                             <input class="form-control" type="text" name="replyText" placeholder="Reply Text...">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="replyer" placeholder="Replyer">
+                            <input class="form-control" type="text" name="replyer" th:value="${#authentication.name}">
                             <input type="hidden" name="rno">
                         </div>
                     </div>
@@ -142,14 +144,58 @@
                     modal.modal('show');
 
                     $('input[name="replyText"]').val('');
-                    $('input[name="replyer"]').val('');
 
                     $(".modal-footer .btn").hide();
                     $(".replySave, .replyClose").show();
 
                 });
 
-            });
+                //댓글 등록
+                $(".replySave").click(function(){
+
+                    var reply = {
+                        qno: qno,
+                        text: $('input[name="replyText"]').val(),
+                        replyerEmail: [[${#authentication.name}]]
+                    }
+
+                    console.log(reply);
+
+                    $.ajax({
+                        url: '/replies/',
+                        method:'post',
+                        data: JSON.stringify(reply),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function(data){    //data : Long rno
+                            console.log(data);
+
+                            var newRno = parseInt(data);
+
+                            alert(newRno + "번 댓글이 등록되었습니다.");
+                            modal.modal('hide');
+                            loadJSONData();
+                        }
+                    })//end ajax
+
+                });//end replySave
+
+                //댓글 클릭시
+                $('.replyList').on('click', ".card-body", function(){
+
+                    var rno = $(this).data("rno");  //댓글 목록의 댓글 하나의 data-rno 속성
+
+                    $("input[name='replyText']").val($(this).find('.card-title').html());
+                    $("input[name='replyerEmail']").val($(this).find('.card-subtitle').html());
+                    $("input[name='rno']").val(rno);
+
+                    $(".modal-footer.btn").hide();
+                    $(".replyRemove, .replyModify, .replyClose").show();
+
+                    modal.modal('show');
+                });
+
+            });//end document
 
 
         </script>
