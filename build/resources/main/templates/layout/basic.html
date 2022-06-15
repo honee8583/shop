@@ -10,7 +10,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>Shopping</title>
 
     <!-- Bootstrap core CSS -->
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -30,14 +30,18 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
     <!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading">Start Bootstrap </div>
+        <div class="sidebar-heading">Shopping</div>
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Best</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">New</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Sale</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">MTM(맨투맨)</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Shirts(셔츠)</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Pants(바지)</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Shoes(신발)</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Accessory(액세서리)</a>
+            <a th:href="@{/notice/list}" class="list-group-item list-group-item-action bg-light">Notice(공지사항)</a>
+            <a th:href="@{/question/list}" class="list-group-item list-group-item-action bg-light">Question(고객문의)</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->

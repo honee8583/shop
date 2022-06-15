@@ -5,7 +5,7 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this :: content}) }">
     <th:block th:fragment="content">
 
-        <h1 class="mt-4">Question List Page
+        <h1 class="mt-4">Question List
             <span>
                 <a sec:authorize="hasRole('USER')" th:href="@{/question/register}">
                     <button type="button" class="btn btn-outline-primary">REGISTER</button>
