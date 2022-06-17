@@ -21,6 +21,7 @@ public class ReplyController {
 
     @GetMapping(value = "question/{qno}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ReplyDTO>> getListByQuestion(@PathVariable("qno") Long qno){
+
         log.info("qno : " + qno);
 
         return new ResponseEntity<>(replyService.getList(qno), HttpStatus.OK);
