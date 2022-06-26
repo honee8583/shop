@@ -37,9 +37,13 @@ public class MemberUserDetailsService implements UserDetailsService {
         log.info("----------------------------");
         log.info(member);
 
+        //UserDetails 구성
         AuthMemberDTO memberDTO = new AuthMemberDTO(
                 member.getEmail(),
                 member.getPassword(),
+                member.getName(),
+                member.getAddress(),
+                member.getPhone(),
                 member.isFromSocial(),
                 member.getRoleSet().stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name())).collect(Collectors.toSet())
@@ -48,6 +52,7 @@ public class MemberUserDetailsService implements UserDetailsService {
         memberDTO.setName(member.getName());
         memberDTO.setFromSocial(member.isFromSocial());
 
+        //UserDetails 를 반환할경우 로그인 완료
         return memberDTO;
     }
 }

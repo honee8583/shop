@@ -65,7 +65,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
 
-        Function<Notice, NoticeDTO> fn = (notice -> entityToDto(notice));
+        Function<Notice, NoticeDTO> fn = notice -> entityToDto(notice);
 
         return new PageResultDTO<>(result, fn);
     }

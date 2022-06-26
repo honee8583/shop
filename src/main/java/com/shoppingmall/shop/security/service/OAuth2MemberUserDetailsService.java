@@ -32,7 +32,8 @@ public class OAuth2MemberUserDetailsService extends DefaultOAuth2UserService {
         log.info("-------------------------------");
         log.info("userRequest : " + userRequest);
 
-        String clientName = userRequest.getClientRegistration().getClientName();
+        //String clientName = userRequest.getClientRegistration().getClientId();
+        String clientName = userRequest.getClientRegistration().getClientName();    //google
 
         log.info("clientName : " + clientName);
         log.info(userRequest.getAdditionalParameters());
@@ -52,13 +53,15 @@ public class OAuth2MemberUserDetailsService extends DefaultOAuth2UserService {
 
         log.info("EMAIL : " + email);
 
-        Member member = saveSocialMember(email);
+        Member member = saveSocialMember(email);    //최초 로그인일경우 강제 회원가입 진행
 
-        //return oAuth2User;
-
+        //OAuth2User 구성
         AuthMemberDTO authMemberDTO = new AuthMemberDTO(
                 member.getEmail(),
                 member.getPassword(),
+                member.getName(),
+                member.getAddress(),
+                member.getPhone(),
                 member.isFromSocial(),
                 member.getRoleSet().stream().map(
                         role -> new SimpleGrantedAuthority("ROLE_" + role.name())
@@ -68,6 +71,7 @@ public class OAuth2MemberUserDetailsService extends DefaultOAuth2UserService {
 
         authMemberDTO.setName(member.getName());
 
+        //OAuth2User 반환시 로그인 완료
         return authMemberDTO;
     }
 
